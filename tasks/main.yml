@@ -7,7 +7,7 @@
     # creates: "~/.nvm"
   ignore_errors: false
   become_user: "{{ item }}"
-  loop: "{{ USERS }}"
+  loop: "{{ USERS_NVM_NODE }}"
 
 - name: Push NVM conf to {{ DEFAULT_SHELL_CONF_FILE }}
   ansible.builtin.lineinfile:
@@ -23,7 +23,7 @@
       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     state: present
   become_user: "{{ item }}"
-  loop: "{{ USERS }}"
+  loop: "{{ USERS_NVM_NODE }}"
 
 - name: Install node {{ NODE_VERSION }}
   ansible.builtin.shell:
@@ -32,7 +32,7 @@
   register: result
   changed_when: "'done' in result.stdout"
   become_user: "{{ item }}"
-  loop: "{{ USERS }}"
+  loop: "{{ USERS_NVM_NODE }}"
 
 - name: Link binaries to /usr/bin
   ansible.builtin.shell:
