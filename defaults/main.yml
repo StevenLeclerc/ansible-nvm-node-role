@@ -1,3 +1,8 @@
 ---
 
 NODE_VERSION: 16
+DEFAULT_SHELL_PATH: /bin/bash
+DEFAULT_SHELL_CONF_FILE: ~/.bashrc
+USERS:
+  - centos
+  - root
