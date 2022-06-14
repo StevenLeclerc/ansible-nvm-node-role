@@ -1,0 +1,26 @@
+---
+# tasks file for nvm_node
+
+- name: Install mandatory packages from curl
+  ansible.builtin.command:
+    cmd: '/bin/bash -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash"'
+    creates: "~/.nvm"
+  ignore_errors: false
+
+- name: Install node {{ NODE_VERSION }}
+  ansible.builtin.command:
+    cmd: "/bin/zsh -c \"source ~/.bashrc && nvm install {{ NODE_VERSION }} && echo 'done'\""
+  register: result
+  become_user: admin
+  changed_when: "'done' in result.stdout"
+
+- name: Link binary to /usr/bin
+  ansible.builtin.shell:
+    cmd: "whereis {{ item.name }} || awk -F: '{system(\"sudo ln -s \" $2 \" /usr/bin/\" $1 \" && sudo chmod +x /usr/bin/$1\")}' && echo 'done'"
+  loop:
+    - { name: node }
+    - { name: npm }
+  loop_control:
+    label: "{{ item.name }}"
+  register: result
+  changed_when: "'done' in result.stdout"
