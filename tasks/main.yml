@@ -3,15 +3,15 @@
 
 - name: Install mandatory packages from curl
   ansible.builtin.command:
-    cmd: '{{ DEFAULT_SHELL_PATH }} -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash"'
+    cmd: '{{ NVM_NODE_DEFAULT_SHELL_PATH }} -c "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash"'
     # creates: "~/.nvm"
   ignore_errors: false
   become_user: "{{ item }}"
-  loop: "{{ USERS_NVM_NODE }}"
+  loop: "{{ NVM_NODE_USERS }}"
 
-- name: Push NVM conf to {{ DEFAULT_SHELL_CONF_FILE }}
+- name: Push NVM conf to {{ NVM_NODE_DEFAULT_SHELL_CONF_FILE }}
   ansible.builtin.lineinfile:
-    dest: "{{ DEFAULT_SHELL_CONF_FILE }}"
+    dest: "{{ NVM_NODE_DEFAULT_SHELL_CONF_FILE }}"
     search_string: |
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -23,16 +23,16 @@
       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     state: present
   become_user: "{{ item }}"
-  loop: "{{ USERS_NVM_NODE }}"
+  loop: "{{ NVM_NODE_USERS }}"
 
-- name: Install node {{ NODE_VERSION }}
+- name: Install node {{ NVM_NODE_VERSION }}
   ansible.builtin.shell:
-    cmd: "source {{ DEFAULT_SHELL_CONF_FILE }} && nvm install {{ NODE_VERSION }} && echo 'done'"
-    executable: "{{ DEFAULT_SHELL_PATH }}"
+    cmd: "source {{ NVM_NODE_DEFAULT_SHELL_CONF_FILE }} && nvm install {{ NVM_NODE_VERSION }} && echo 'done'"
+    executable: "{{ NVM_NODE_DEFAULT_SHELL_PATH }}"
   register: result
   changed_when: "'done' in result.stdout"
   become_user: "{{ item }}"
-  loop: "{{ USERS_NVM_NODE }}"
+  loop: "{{ NVM_NODE_USERS }}"
 
 - name: Link binaries to /usr/bin
   ansible.builtin.shell:
