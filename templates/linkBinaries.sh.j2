@@ -1,0 +1,5 @@
+#!/bin/sh
+
+{{ NVM_EXPORT }}
+
+whereis $1 | awk -F: '{system("ln -s " $2 " /usr/bin/" $1)}'

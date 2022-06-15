@@ -16,13 +16,20 @@ Role Variables
 By default:
 
 ```
+NVM_EXPORT: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 NODE_VERSION: 16
 DEFAULT_SHELL_PATH: /bin/bash
 DEFAULT_SHELL_CONF_FILE: ~/.bashrc
-USERS:
+USERS_NVM_NODE:
   - centos
   - root
+SCRIPT_LOCAL_PATH: roles/stevenleclerc.ansible_nvm_node_role/files
 ```
+
+The `SCRIPT_LOCAL_PATH` is the path where the templated file should be deposed. If you test this roles changed it to `./files`.
 
 Dependencies
 ------------
