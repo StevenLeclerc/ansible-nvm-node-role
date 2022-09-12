@@ -27,12 +27,12 @@
   become_user: "{{ item }}"
   loop: "{{ USERS_NVM_NODE }}"
 
-- name: Generate linkBinaries script file from template
-  ansible.builtin.template:
-    src: linkBinaries.sh.j2
-    dest: "{{ SCRIPT_LOCAL_PATH }}/linkBinaries.sh"
-  delegate_to: localhost
-  tags: nvm-node-link-binaries
+# - name: Generate linkBinaries script file from template
+#   ansible.builtin.template:
+#     src: linkBinaries.sh.j2
+#     dest: "{{ SCRIPT_LOCAL_PATH }}/linkBinaries.sh"
+#   delegate_to: localhost
+#   tags: nvm-node-link-binaries
 
 - name: Link binaries to /usr/bin
   ansible.builtin.script: "linkBinaries.sh {{ item.name }} && ls -la /usr/bin/{{ item.name }}"
